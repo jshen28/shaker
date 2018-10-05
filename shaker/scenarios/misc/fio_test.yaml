@@ -1,0 +1,49 @@
+title: OpenStack instances metadata query
+
+description:
+  In this scenario Shaker launches ten instances on a single compute node and
+  asks instances to retrieve the metadata. The scenario is used to load
+  metadata processes.
+
+deployment:
+  template: instance_metadata.hot
+  accommodation: [single_room, density: 1, compute_nodes: 1]
+
+execution:
+  tests:
+  -
+    title: Instance Metadata
+    class: shell
+    script: |
+      #!/bin/sh
+
+      CONF_FILE=/tmp/fio-test
+
+      cat > ${CONF_FILE} <<EOF
+      ; Read 4 files with aio at different depths
+      [global]
+      ioengine=libaio
+      buffered=0
+      rw=randread
+      direct=1
+      bs=16k
+      size=512m
+      ; curl metadata server to retrieve disk info
+      filename=/dev/vdc
+
+      [test1]
+      iodepth=1
+
+      [test2]
+      iodepth=4
+
+      [test3]
+      iodepth=16
+
+      [test4]
+      iodepth=32
+      EOF
+
+      # return a json string
+      fio ${CONF_FILE} --output-format=json
+

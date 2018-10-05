@@ -5,3 +5,4 @@ libssl-dev:
 libffi-dev:
 python-dev:
 wget:
+fio:

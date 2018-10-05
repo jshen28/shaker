@@ -88,6 +88,18 @@ resources:
             "$SERVER_ENDPOINT": { get_param: server_endpoint }
             "$AGENT_ID": {{ agent.id }}
 
+  {{ agent.id }}_volume:
+    type: OS::Cinder::Volume
+    properties:
+      size: 10
+
+  {{ agent.id }}_volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: {{ agent.id }} }
+      volume_id: { get_resource: {{ agent.id }}_volume }
+      mountpoint: /dev/vdc
+
   {{ agent.id }}_port:
     type: OS::Neutron::Port
     properties:

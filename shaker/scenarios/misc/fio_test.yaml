@@ -13,7 +13,7 @@ execution:
   tests:
   -
     title: Instance Metadata
-    class: shell
+    class: fio
     script: |
       #!/bin/sh
 
